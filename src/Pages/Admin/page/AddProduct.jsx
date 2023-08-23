@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../../../Context/data/globalContext";
 
 const AddProduct = () => {
+  const { newProduct, setNewProduct, addProduct } = useContext(GlobalContext);
+
+  const handleChange = (event) =>{
+    const { name, value } = event.target;
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }))
+  }
+
   return (
     <div>
       <div className=" flex justify-center items-center h-screen shadow-md bg-slate-900">
@@ -12,6 +23,8 @@ const AddProduct = () => {
           </div>
           <div>
             <input
+              value={newProduct.title}
+              onChange={handleChange}
               type="text"
               name="title"
               className=" bg-gray-600 mb-4 px-2 py-2 w-full lg:w-[20em] rounded-lg text-white placeholder:text-gray-200 outline-none"
@@ -20,6 +33,8 @@ const AddProduct = () => {
           </div>
           <div>
             <input
+              value={newProduct.price}
+              onChange={handleChange}
               type="text"
               name="price"
               className=" bg-gray-600 mb-4 px-2 py-2 w-full lg:w-[20em] rounded-lg text-white placeholder:text-gray-200 outline-none"
@@ -28,14 +43,18 @@ const AddProduct = () => {
           </div>
           <div>
             <input
+              value={newProduct.imageUrl}
+              onChange={handleChange}
               type="text"
-              name="imageurl"
+              name="imageUrl"
               className=" bg-gray-600 mb-4 px-2 py-2 w-full lg:w-[20em] rounded-lg text-white placeholder:text-gray-200 outline-none"
               placeholder="Product imageUrl"
             />
           </div>
           <div>
             <input
+              value={newProduct.category}
+              onChange={handleChange}
               type="text"
               name="category"
               className=" bg-gray-600 mb-4 px-2 py-2 w-full lg:w-[20em] rounded-lg text-white placeholder:text-gray-200 outline-none"
@@ -44,15 +63,17 @@ const AddProduct = () => {
           </div>
           <div>
             <textarea
+              value={newProduct.description}
+              onChange={handleChange}
               cols="30"
               rows="10"
-              name="title"
+              name="description"
               className=" bg-gray-600 mb-4 px-2 py-2 w-full lg:w-[20em] rounded-lg text-white placeholder:text-gray-200 outline-none"
-              placeholder="Product title"
+              placeholder="Product Description"
             ></textarea>
           </div>
           <div className=" flex justify-center mb-3">
-            <button className=" bg-yellow-500 w-full text-black font-bold  px-2 py-2 rounded-lg">
+            <button  onClick = {addProduct} className=" bg-yellow-500 w-full text-black font-bold  px-2 py-2 rounded-lg">
               Add Product
             </button>
           </div>

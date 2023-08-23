@@ -1,15 +1,18 @@
-import React, { useContext } from "react";
+
 import Layout from "../../Components/Layout";
-import { GlobalContext } from "../../Context/data/globalContext";
 import HeroSection from "../../Components/HeroSection";
 import Filter from "../../Components/Fiter";
 import ProductCard from "../../Components/ProductCard";
 import Track from "../../Components/Track";
 import Testimonial from "../../Components/Testimonial";
+// import { useDispatch, useSelector } from "react-redux";
+// import { addToCart, deleteFromCart } from "../../Redux/CartSlice";
 
 const Home = () => {
-  const { name } = useContext(GlobalContext);
-  console.log(name);
+  // const dispatch = useDispatch()
+  // const cartItem = useSelector((state) => state.cart)
+  // console.log(cartItem);
+  
   return (
     <Layout>
       <HeroSection />
