@@ -10,6 +10,7 @@ import {
   setDoc,
   doc,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 
@@ -70,17 +71,11 @@ const GlobalFlowContext = (props) => {
     }
   };
 
-  useEffect(() => {
-    getProductData();
-  }, []);
-
+  // get Products
   const getProductData = () => {
     setLoader(true);
     try {
-      const q = query(
-        collection(fireDB, "products"),
-        orderBy("time")
-      );
+      const q = query(collection(fireDB, "products"), orderBy("time"));
       const data = onSnapshot(q, (QuerySnapshot) => {
         let productArray = [];
         QuerySnapshot.forEach((item) => {
@@ -101,24 +96,24 @@ const GlobalFlowContext = (props) => {
     setNewProduct(item);
   };
 
-  console.log("id:", newProduct.id, productData );
-   // update product
-   const updateProduct = async () => {
-    setLoader(true)
+  console.log("id:", newProduct.id, productData);
+  // update product
+  const updateProduct = async () => {
+    setLoader(true);
     try {
-      await setDoc(doc(fireDB, "products", newProduct.id), newProduct)
-      toast.success("Product Updated successfully")
+      await setDoc(doc(fireDB, "products", newProduct.id), newProduct);
+      toast.success("Product Updated successfully");
       setTimeout(() => {
-        window.location.href = '/dashboard'
+        window.location.href = "/dashboard";
       }, 800);
       getProductData();
-      setLoader(false)
+      setLoader(false);
     } catch (error) {
-      setLoader(false)
-      console.log(error)
+      setLoader(false);
+      console.log(error);
     }
-    setNewProduct("")
-  }
+    setNewProduct("");
+  };
 
   const deleteProduct = async (item) => {
     try {
@@ -128,10 +123,36 @@ const GlobalFlowContext = (props) => {
       setLoader(false);
       getProductData();
     } catch (error) {
-      toast.success('Product Deleted Failed')
+      toast.success("Product Deleted Failed");
       setLoader(false);
     }
   };
+
+  // get Order from Database
+  const [order, setOrder] = useState([]);
+
+  const getOrderData = async () => {
+    setLoader(true)
+    try {
+      const result = await getDocs(collection(fireDB, "orders"))
+      const ordersArray = [];
+      result.forEach((doc) => {
+        ordersArray.push(doc.data());
+        setLoader(false)
+      });
+      setOrder(ordersArray);
+      console.log(ordersArray)
+      setLoader(false);
+    } catch (error) {
+      console.log(error)
+      setLoader(false)
+    }
+  }
+
+  useEffect(() => {
+    getProductData();
+    getOrderData();
+  }, []);
 
   const value = {
     mode,
@@ -145,6 +166,7 @@ const GlobalFlowContext = (props) => {
     editHandle,
     updateProduct,
     deleteProduct,
+    order,
   };
 
   return <GlobalContext.Provider value={value} {...props} />;
