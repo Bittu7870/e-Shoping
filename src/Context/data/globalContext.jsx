@@ -132,26 +132,48 @@ const GlobalFlowContext = (props) => {
   const [order, setOrder] = useState([]);
 
   const getOrderData = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
-      const result = await getDocs(collection(fireDB, "orders"))
+      const result = await getDocs(collection(fireDB, "orders"));
       const ordersArray = [];
       result.forEach((doc) => {
         ordersArray.push(doc.data());
-        setLoader(false)
+        setLoader(false);
       });
       setOrder(ordersArray);
-      console.log(ordersArray)
+      console.log(ordersArray);
       setLoader(false);
     } catch (error) {
-      console.log(error)
-      setLoader(false)
+      console.log(error);
+      setLoader(false);
     }
-  }
+  };
+
+  // get users from db
+  const [user, setUser] = useState([]);
+
+  const getUserData = async () => {
+    setLoader(true);
+    try {
+      const result = await getDocs(collection(fireDB, "users"));
+      const usersArray = [];
+      result.forEach((doc) => {
+        usersArray.push(doc.data());
+        setLoader(false);
+      });
+      setUser(usersArray);
+      console.log(usersArray);
+      setLoader(false);
+    } catch (error) {
+      console.log(error);
+      setLoader(false);
+    }
+  };
 
   useEffect(() => {
     getProductData();
     getOrderData();
+    getUserData();
   }, []);
 
   const value = {
@@ -167,6 +189,7 @@ const GlobalFlowContext = (props) => {
     updateProduct,
     deleteProduct,
     order,
+    user,
   };
 
   return <GlobalContext.Provider value={value} {...props} />;

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 // import Loader from "../../../Components/Loader";
 
 function DashboardTab() {
-  const { mode, productData, deleteProduct, editHandle, order } =
+  const { mode, productData, deleteProduct, editHandle, order, user } =
     useContext(GlobalContext);
   console.log("productsData:", productData);
 
@@ -304,12 +304,7 @@ function DashboardTab() {
                             </td>
                             {/* ... Other order-related columns ... */}
                             {orderData.cartItem.map((item, cartIndex) => {
-                              const {
-                                title,
-                                category,
-                                imageUrl,
-                                price,
-                              } = item;
+                              const { title, category, imageUrl, price } = item;
                               return (
                                 <React.Fragment key={cartIndex}>
                                   <th
@@ -408,7 +403,6 @@ function DashboardTab() {
             </TabPanel>
 
             <TabPanel>
-              {/* <User addressInfo={addressInfo} setAddressInfo={setAddressInfo} setLoading={setLoading} /> */}
               <div className="relative overflow-x-auto mb-10">
                 <h1
                   className=" text-center mb-5 text-3xl font-semibold underline"
@@ -433,74 +427,81 @@ function DashboardTab() {
                         Name
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        Address
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Pincode
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Phone Number
-                      </th>
-                      <th scope="col" className="px-6 py-3">
                         Email
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        UID
                       </th>
                       <th scope="col" className="px-6 py-3">
                         Date
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr
-                      className="bg-gray-50 border-b  dark:border-gray-700"
-                      style={{
-                        backgroundColor: mode === "dark" ? "rgb(46 49 55)" : "",
-                        color: mode === "dark" ? "white" : "",
-                      }}
-                    >
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        1.
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        Name
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        Address
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        181919
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        1991818818
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        kkk@gmail.com
-                      </td>
-                      <td
-                        className="px-6 py-4 text-black "
-                        style={{ color: mode === "dark" ? "white" : "" }}
-                      >
-                        12 Aug 2019
-                      </td>
-                    </tr>
-                  </tbody>
+                  {user && user.length > 0 && (
+                    <tbody>
+                      {user.map((item, index) => {
+                        const { email, name, time, uId } = item;
+                        return (
+                          <tr
+                            key={index}
+                            className={`bg-gray-50 border-b ${
+                              mode === "dark" ? "dark:border-gray-700" : ""
+                            }`}
+                            style={{
+                              backgroundColor:
+                                mode === "dark" ? "rgb(46 49 55)" : "",
+                              color: mode === "dark" ? "white" : "",
+                            }}
+                          >
+                            <td
+                              className={`px-6 py-4 ${
+                                mode === "dark" ? "text-white" : "text-black"
+                              }`}
+                            >
+                              {index + 1}
+                            </td>
+                            <td
+                              className={`px-6 py-4 ${
+                                mode === "dark" ? "text-white" : "text-black"
+                              }`}
+                            >
+                              {name}
+                            </td>
+                            <td
+                              className={`px-6 py-4 ${
+                                mode === "dark" ? "text-white" : "text-black"
+                              }`}
+                            >
+                              {email}
+                            </td>
+                            <td
+                              className={`px-6 py-4 ${
+                                mode === "dark" ? "text-white" : "text-black"
+                              }`}
+                            >
+                              {uId}
+                            </td>
+                            <td
+                              className={`px-6 py-4 ${
+                                mode === "dark" ? "text-white" : "text-black"
+                              }`}
+                            >
+                              {time
+                                ? new Date(
+                                    time.seconds * 1000
+                                  ).toLocaleDateString("en-US", {
+                                    weekday: "short",
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  })
+                                : "N/A"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  )}
                 </table>
               </div>
             </TabPanel>
